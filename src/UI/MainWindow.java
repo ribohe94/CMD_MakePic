@@ -1,14 +1,17 @@
 package UI;
 
+import Control.Control;
+
 import java.awt.*;
-import javax.swing.JFrame;
+import javax.swing.*;
 
 /**
  * Created by ribohe94 on 24/07/16.
  */
-public class mainWindow extends JFrame{
+public class MainWindow extends JFrame{
 
-    public mainWindow() throws HeadlessException {
+    public MainWindow() throws HeadlessException {
+        con = new Control(can);
         initialSetup(this.getContentPane());
         configurePanel(this.getContentPane());
     }
@@ -20,6 +23,7 @@ public class mainWindow extends JFrame{
     private void initialSetup(Container c) {
         this.setSize(640, 480);
         this.setTitle("Crea Figuras CMDLine");
+        this.setLayout(new BorderLayout());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
     }
@@ -30,8 +34,13 @@ public class mainWindow extends JFrame{
     }
 
     /**
+     * Mutators
+     */
+
+    /**
      * Variables
      */
 
     Canvas can;
+    Control con;
 }

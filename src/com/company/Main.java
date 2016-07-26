@@ -1,12 +1,11 @@
 package com.company;
 
-import Control.Draw;
-import UI.mainWindow;
+import UI.MainWindow;
 
 public class Main {
 
     public static void main(String[] args) {
-        mainWindow mw = new mainWindow();
+        MainWindow mw = new MainWindow();
         mw.init();
     }
 }
