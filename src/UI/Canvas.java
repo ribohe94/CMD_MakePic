@@ -1,5 +1,8 @@
 package UI;
 
+import Control.Input;
+import Control.ReadWrite;
+import Control.State;
 import Control.States;
 import com.sun.corba.se.impl.orbutil.ORBUtility;
 import shapes.*;
@@ -7,6 +10,7 @@ import shapes.Shape;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.io.BufferedReader;
@@ -22,17 +26,30 @@ public class Canvas extends JPanel {
     public Canvas() {
         this.setBackground(new Color(40, 40, 40));
         shapeList = States.shapeList;
+        br = new BufferedReader(new InputStreamReader(System.in));
+        s = States.Init;
     }
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         g2 = (Graphics2D) g;
+        g2.setPaint(Color.white);
+
         String cmd = "";
-        /*try {
+        try {
             cmd = br.readLine();
         } catch (IOException e) {
             e.printStackTrace();
-        }*/
+        }
+
+        if(cmd.equals("exit")) {
+            System.exit(0);
+        }
+
+        ReadWrite.writeFile("input.txt", cmd);
+        ReadWrite.loadFile("input.txt", s);
+
+        repaint();
 
         for (int i = 0; i < shapeList.size(); i++) {
             if ("circle".equals(shapeList.get(i).getName())) {
@@ -45,8 +62,8 @@ public class Canvas extends JPanel {
                         paintRectangle(shapeList.get(i).getAttributes()[0], shapeList.get(i).getAttributes()[1], shapeList.get(i).getAttributes()[2], shapeList.get(i).getAttributes()[3]);
                     } else {
                         if ("triangle".equals(shapeList.get(i).getName())) {
-                            paintTriangle((int)shapeList.get(i).getAttributes()[0], (int)shapeList.get(i).getAttributes()[1], (int)shapeList.get(i).getAttributes()[2],
-                                    (int)shapeList.get(i).getAttributes()[3], (int)shapeList.get(i).getAttributes()[4], (int)shapeList.get(i).getAttributes()[5], g);
+                            paintTriangle((int) shapeList.get(i).getAttributes()[0], (int) shapeList.get(i).getAttributes()[1], (int) shapeList.get(i).getAttributes()[2],
+                                    (int) shapeList.get(i).getAttributes()[3], (int) shapeList.get(i).getAttributes()[4], (int) shapeList.get(i).getAttributes()[5], g);
                         } else {
                             if ("doughnut".equals(shapeList.get(i).getName())) {
                                 paintDoughnut(shapeList.get(i).getAttributes()[0], shapeList.get(i).getAttributes()[1], shapeList.get(i).getAttributes()[2], shapeList.get(i).getAttributes()[3]);
@@ -56,8 +73,6 @@ public class Canvas extends JPanel {
                 }
             }
         }
-
-
     }
 
     public void paintCircle(double posX, double posY, double radius) {
@@ -79,8 +94,10 @@ public class Canvas extends JPanel {
     }
 
     public void paintDoughnut(double posX, double posY, double minorR, double mayorR) {
-        g2.draw(new Ellipse2D.Double(posX, posY, minorR, minorR));
-        g2.draw(new Ellipse2D.Double(posX, posY, mayorR, mayorR));
+        Area donut = new Area(new Ellipse2D.Double(posX, posY, mayorR, mayorR));
+        Area hole = new Area(new Ellipse2D.Double((posX + (mayorR / 2)) - (minorR / 2), (posY + (mayorR / 2)) - (minorR / 2), minorR, minorR));
+        donut.subtract(hole);
+        g2.fill(donut);
     }
 
     /**
@@ -89,5 +106,6 @@ public class Canvas extends JPanel {
 
     private Graphics2D g2;
     private ArrayList<shapes.Shape> shapeList;
-
+    BufferedReader br;
+    States s;
 }

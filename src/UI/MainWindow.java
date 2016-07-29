@@ -18,7 +18,7 @@ public class MainWindow extends JFrame {
     }
 
     private void initialSetup(Container c) {
-        this.setSize(640, 480);
+        this.setSize(1280, 720);
         this.setTitle("Crea Figuras CMDLine");
         this.setLayout(new BorderLayout());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -27,7 +27,11 @@ public class MainWindow extends JFrame {
 
     private void configurePanel(Container c) {
         can = new Canvas();
-        c.add(can);
+        JScrollPane scrollPane = new JScrollPane(can);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        scrollPane.setBounds(50, 30, 300, 50);
+        c.add(scrollPane);
     }
     /**
      * Mutators

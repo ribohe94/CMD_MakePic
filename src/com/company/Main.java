@@ -10,7 +10,6 @@ import shapes.Shape;
 public class Main {
 
     public static void main(String[] args) {
-        State s = States.Init;
 
         /*double[] array = {100,200,300};
 
@@ -20,7 +19,6 @@ public class Main {
 
         //System.out.println(ReadWrite.isInt("1542"));
 
-        ReadWrite.loadFile("input.txt", s);
         MainWindow mw = new MainWindow();
         mw.init();
 

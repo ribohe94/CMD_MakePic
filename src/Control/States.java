@@ -14,6 +14,9 @@ public enum States implements State {
         @Override
         public State next(Input value) {
             if (value.getInput() != null) {
+                if("list".equals(value.getArrInput()[0])){
+                    return list;
+                }
                 if ("square".equals(value.getArrInput()[0]) || "circle".equals(value.getArrInput()[0]) ||
                         "rectangle".equals(value.getArrInput()[0]) || "triangle".equals(value.getArrInput()[0]) ||
                         "doughnut".equals(value.getArrInput()[0])) {
@@ -160,6 +163,19 @@ public enum States implements State {
         @Override
         public State next(Input value) {
             System.err.println("ERROR: Value is not a number");
+            return null;
+        }
+    },
+    list {
+        @Override
+        public State next(Input value) {
+            for (int i = 0; i < shapeList.size(); i++) {
+                System.out.print("Figura " + i + ": " + shapeList.get(i).getName() + " ");
+                for(int j = 0; j < shapeList.get(i).getAttributes().length; j++) {
+                    System.out.print(shapeList.get(i).getAttributes()[j] + " ");
+                }
+                System.out.println("");
+            }
             return null;
         }
     };

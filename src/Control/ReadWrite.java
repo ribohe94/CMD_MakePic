@@ -9,16 +9,16 @@ import java.util.Scanner;
 public class ReadWrite {
 
     public static void writeFile(String filename, String text) {
-        PrintWriter printWriter = null;
-        try {
-            printWriter = new PrintWriter(filename, "UTF-8");
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+        if (!text.equals("")) {
+            PrintWriter printWriter = null;
+            try {
+                printWriter = new PrintWriter(new FileOutputStream(new File(filename), true));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            printWriter.println(text);
+            printWriter.close();
         }
-        printWriter.println(text);
-        printWriter.close();
     }
 
     public static void loadFile(String filename, State s) {
@@ -27,8 +27,7 @@ public class ReadWrite {
             Input in;
             while (line != null) {
                 in = new Input(line);
-                System.out.println("SIZE: " + in.getArrInput().length);
-                for(s = States.Init; s!=null;s = s.next(in)) {
+                for (s = States.Init; s != null; s = s.next(in)) {
 
                 }
                 line = br.readLine();

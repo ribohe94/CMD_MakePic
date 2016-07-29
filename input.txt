@@ -1,1 +1,7 @@
-doughnut 100 150 200 150
+square 100 200 300
+square 100 200 400
+square 200 150 250
+circle 300 500 500
+rectangle 150 150 300 600
+doughnut 300 200 100 150
+triangle 10 10 50 50 30 70
