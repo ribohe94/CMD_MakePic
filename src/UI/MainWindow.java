@@ -1,17 +1,14 @@
 package UI;
 
-import Control.Control;
-
 import java.awt.*;
 import javax.swing.*;
 
 /**
  * Created by ribohe94 on 24/07/16.
  */
-public class MainWindow extends JFrame{
+public class MainWindow extends JFrame {
 
     public MainWindow() throws HeadlessException {
-        con = new Control(can);
         initialSetup(this.getContentPane());
         configurePanel(this.getContentPane());
     }
@@ -32,7 +29,6 @@ public class MainWindow extends JFrame{
         can = new Canvas();
         c.add(can);
     }
-
     /**
      * Mutators
      */
@@ -42,5 +38,4 @@ public class MainWindow extends JFrame{
      */
 
     Canvas can;
-    Control con;
 }
