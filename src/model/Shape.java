@@ -1,4 +1,4 @@
-package shapes;
+package model;
 
 /**
  * Created by ribohe94 on 29/07/16.

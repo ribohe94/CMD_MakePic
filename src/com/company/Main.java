@@ -1,11 +1,7 @@
 package com.company;
 
-import Control.Input;
-import Control.ReadWrite;
-import Control.State;
-import Control.States;
 import UI.MainWindow;
-import shapes.Shape;
+import model.Alphabet;
 
 public class Main {
 

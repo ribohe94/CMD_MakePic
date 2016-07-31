@@ -1,9 +1,9 @@
 package Control;
 
-import shapes.Shape;
+import model.Alphabet;
+import model.Shape;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  * Created by ribohe94 on 28/07/16.
@@ -14,42 +14,32 @@ public enum States implements State {
         @Override
         public State next(Input value) {
             if (value.getInput() != null) {
-                if("list".equals(value.getArrInput()[0])){
+                if (Alphabet.list.toString().equals(value.getArrInput()[0])) {
                     return list;
                 }
-                if ("square".equals(value.getArrInput()[0]) || "circle".equals(value.getArrInput()[0]) ||
-                        "rectangle".equals(value.getArrInput()[0]) || "triangle".equals(value.getArrInput()[0]) ||
-                        "doughnut".equals(value.getArrInput()[0])) {
-                    if(("square".equals(value.getArrInput()[0]) || "circle".equals(value.getArrInput()[0])) &&
-                            value.getArrInput().length > 4){
+                /**
+                 * Loops through {@link Alphabet} to verify the command is present
+                 */
+                boolean isInAlphabet = false;
+                for (Alphabet al : Alphabet.values()) {
+                    if (al.toString().equals(value.getArrInput()[0])) {
+                        isInAlphabet = true;
+                    }
+                }
+                /**
+                 * If word is in alphabet, then it checks how many arguments it is receiving
+                 */
+                if (isInAlphabet) {
+
+                    if (Alphabet.getExression(value.getArrInput()[0]).getArguments() < value.getArrInput().length) {
                         return tooManyArg;
                     } else {
-                        if(("square".equals(value.getArrInput()[0]) || "circle".equals(value.getArrInput()[0])) &&
-                                value.getArrInput().length < 4) {
+                        if (Alphabet.getExression(value.getArrInput()[0]).getArguments() > value.getArrInput().length) {
                             return missingArg;
                         } else {
-                            if(("rectangle".equals(value.getArrInput()[0]) || "doughnut".equals(value.getArrInput()[0])) &&
-                                    value.getArrInput().length < 5) {
-                                return missingArg;
-                            } else {
-                                if(("rectangle".equals(value.getArrInput()[0]) || "doughnut".equals(value.getArrInput()[0])) &&
-                                        value.getArrInput().length > 5) {
-                                    return tooManyArg;
-                                } else {
-                                    if("triangle".equals(value.getArrInput()[0]) &&
-                                            value.getArrInput().length > 7) {
-                                        return tooManyArg;
-                                    } else {
-                                        if("triangle".equals(value.getArrInput()[0]) &&
-                                                value.getArrInput().length < 7) {
-                                            return missingArg;
-                                        }
-                                    }
-                                }
-                            }
+                            return inNum1;
                         }
                     }
-                    return inNum1;
                 } else {
                     return alienName;
                 }
@@ -57,6 +47,9 @@ public enum States implements State {
             return null;
         }
     },
+    /**
+     * It goes through each parameter to check it is actually an {@link Integer}
+     */
     inNum1 {
         @Override
         public State next(Input value) {
@@ -86,7 +79,11 @@ public enum States implements State {
                             Double.parseDouble(value.getArrInput()[3])};
                     Shape sh = new Shape(value.getArrInput()[0], array);
 
-                    shapeList.add(sh);
+                    if (!isDuplicate(sh)) {
+                        shapeList.add(sh);
+                    } else {
+                        return null;
+                    }
                     return null;
                 }
                 return inNum4;
@@ -104,7 +101,11 @@ public enum States implements State {
                             Double.parseDouble(value.getArrInput()[3]), Double.parseDouble(value.getArrInput()[4])};
                     Shape sh = new Shape(value.getArrInput()[0], array);
 
-                    shapeList.add(sh);
+                    if (!isDuplicate(sh)) {
+                        shapeList.add(sh);
+                    } else {
+                        return null;
+                    }
                     return null;
                 }
                 return inNum5;
@@ -131,13 +132,20 @@ public enum States implements State {
                         Double.parseDouble(value.getArrInput()[3]), Double.parseDouble(value.getArrInput()[4]),
                         Double.parseDouble(value.getArrInput()[5]), Double.parseDouble(value.getArrInput()[6])};
                 Shape sh = new Shape(value.getArrInput()[0], array);
-                shapeList.add(sh);
+                if (!isDuplicate(sh)) {
+                    shapeList.add(sh);
+                } else {
+                    return null;
+                }
                 return null;
             } else {
                 return notNum;
             }
         }
     },
+    /**
+     * Error States
+     */
     missingArg {
         @Override
         public State next(Input value) {
@@ -166,12 +174,15 @@ public enum States implements State {
             return null;
         }
     },
+    /**
+     * Other commands
+     */
     list {
         @Override
         public State next(Input value) {
             for (int i = 0; i < shapeList.size(); i++) {
                 System.out.print("Figura " + i + ": " + shapeList.get(i).getName() + " ");
-                for(int j = 0; j < shapeList.get(i).getAttributes().length; j++) {
+                for (int j = 0; j < shapeList.get(i).getAttributes().length; j++) {
                     System.out.print(shapeList.get(i).getAttributes()[j] + " ");
                 }
                 System.out.println("");
@@ -180,11 +191,19 @@ public enum States implements State {
         }
     };
 
+    private static boolean isDuplicate(Shape sh) {
+        for (Shape shape : shapeList) {
+            if (shape.getName().equals(sh.getName()) && shape.getAttributes().equals(sh.getAttributes())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Variables
      */
 
-    public static int x;
     public static ArrayList<Shape> shapeList = new ArrayList<>();
 
 }

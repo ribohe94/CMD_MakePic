@@ -1,14 +1,18 @@
 package Control;
 
 import java.io.*;
-import java.util.Scanner;
 
 /**
  * Created by ribohe94 on 28/07/16.
  */
 public class ReadWrite {
 
-    public static void writeFile(String filename, String text) {
+    public static void writeFile(String filename, String text, State s) {
+        if(text.trim().equals("list")) {
+            loadCommand(text.trim(), s);
+            return;
+        }
+
         if (!text.equals("")) {
             PrintWriter printWriter = null;
             try {
@@ -27,8 +31,9 @@ public class ReadWrite {
             Input in;
             while (line != null) {
                 in = new Input(line);
-                for (s = States.Init; s != null; s = s.next(in)) {
-
+                s = States.Init;
+                while(s != null) {
+                    s = s.next(in);
                 }
                 line = br.readLine();
             }
@@ -47,6 +52,13 @@ public class ReadWrite {
         }
         // only got here if we didn't return false
         return true;
+    }
+
+    public static void loadCommand(String cmd, State s) {
+        s = States.Init;
+        while(s != null) {
+            s = s.next(new Input(cmd));
+        }
     }
 
 

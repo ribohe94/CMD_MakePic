@@ -1,12 +1,8 @@
 package UI;
 
-import Control.Input;
 import Control.ReadWrite;
-import Control.State;
 import Control.States;
-import com.sun.corba.se.impl.orbutil.ORBUtility;
-import shapes.*;
-import shapes.Shape;
+import model.Alphabet;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,7 +30,7 @@ public class Canvas extends JPanel {
         super.paintComponent(g);
         g2 = (Graphics2D) g;
         g2.setPaint(Color.white);
-
+        shapeList.clear();
         String cmd = "";
         try {
             cmd = br.readLine();
@@ -42,30 +38,30 @@ public class Canvas extends JPanel {
             e.printStackTrace();
         }
 
-        if(cmd.equals("exit")) {
+        if(cmd.trim().equals("exit")) {
             System.exit(0);
         }
 
-        ReadWrite.writeFile("input.txt", cmd);
         ReadWrite.loadFile("input.txt", s);
+        ReadWrite.writeFile("input.txt", cmd, s);
 
         repaint();
 
         for (int i = 0; i < shapeList.size(); i++) {
-            if ("circle".equals(shapeList.get(i).getName())) {
+            if (Alphabet.circle.toString().equals(shapeList.get(i).getName())) {
                 paintCircle(shapeList.get(i).getAttributes()[0], shapeList.get(i).getAttributes()[1], shapeList.get(i).getAttributes()[2]);
             } else {
-                if ("square".equals(shapeList.get(i).getName())) {
+                if (Alphabet.square.toString().equals(shapeList.get(i).getName())) {
                     paintSquare(shapeList.get(i).getAttributes()[0], shapeList.get(i).getAttributes()[1], shapeList.get(i).getAttributes()[2]);
                 } else {
-                    if ("rectangle".equals(shapeList.get(i).getName())) {
+                    if (Alphabet.rectangle.toString().equals(shapeList.get(i).getName())) {
                         paintRectangle(shapeList.get(i).getAttributes()[0], shapeList.get(i).getAttributes()[1], shapeList.get(i).getAttributes()[2], shapeList.get(i).getAttributes()[3]);
                     } else {
-                        if ("triangle".equals(shapeList.get(i).getName())) {
+                        if (Alphabet.triangle.toString().equals(shapeList.get(i).getName())) {
                             paintTriangle((int) shapeList.get(i).getAttributes()[0], (int) shapeList.get(i).getAttributes()[1], (int) shapeList.get(i).getAttributes()[2],
                                     (int) shapeList.get(i).getAttributes()[3], (int) shapeList.get(i).getAttributes()[4], (int) shapeList.get(i).getAttributes()[5], g);
                         } else {
-                            if ("doughnut".equals(shapeList.get(i).getName())) {
+                            if (Alphabet.doughnut.toString().equals(shapeList.get(i).getName())) {
                                 paintDoughnut(shapeList.get(i).getAttributes()[0], shapeList.get(i).getAttributes()[1], shapeList.get(i).getAttributes()[2], shapeList.get(i).getAttributes()[3]);
                             }
                         }
@@ -105,7 +101,7 @@ public class Canvas extends JPanel {
      */
 
     private Graphics2D g2;
-    private ArrayList<shapes.Shape> shapeList;
+    private ArrayList<model.Shape> shapeList;
     BufferedReader br;
     States s;
 }
